@@ -274,7 +274,6 @@ public final class CryptoFrame extends JFrame {
     tempResultFile = null;
     resultStatus.setText("Результат ещё не сформирован");
     keyArea.setText("");
-    // inputBinArea is filled on file load
     outputBinArea.setText("");
   }
 
@@ -295,7 +294,7 @@ public final class CryptoFrame extends JFrame {
       @Override
       protected Void doInBackground() throws Exception {
         long size = file.length();
-        long deadline = System.currentTimeMillis() + 30_000; // goal: up to ~30 sec for a few MB
+        long deadline = System.currentTimeMillis() + 30_000; 
 
         try (InputStream in = new FileInputStream(file)) {
           byte[] buf = new byte[32 * 1024];
@@ -311,7 +310,6 @@ public final class CryptoFrame extends JFrame {
             readTotal += n;
             if (size > 0) setProgress((int) Math.min(100, (readTotal * 100L) / size));
             if (System.currentTimeMillis() > deadline && size >= 2L * 1024 * 1024) {
-              // If file is large and we're exceeding target, keep going but yield to UI more often.
               Thread.sleep(1);
               deadline = System.currentTimeMillis() + 30_000;
             }
@@ -329,7 +327,6 @@ public final class CryptoFrame extends JFrame {
 
       @Override
       protected void done() {
-        // nothing
       }
     };
 
@@ -338,7 +335,6 @@ public final class CryptoFrame extends JFrame {
   }
 
   private static void appendGroupedBits(JTextArea area, CharSequence bits) {
-    // Append bits but insert a space after each 8 bits for readability
     int col = 0;
     String text = area.getText();
     int lastNl = text.lastIndexOf('\n');
